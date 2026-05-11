@@ -49,8 +49,8 @@ const AdminTags = () => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="bg-card border border-border rounded-sm">
-        <table className="w-full text-sm">
+      <div className="bg-card border border-border rounded-sm overflow-x-auto">
+        <table className="w-full text-sm min-w-[360px]">
           <thead className="bg-popover text-xs uppercase tracking-widest text-muted-foreground"><tr><th className="px-4 py-3 text-left">Name</th><th className="text-left">Remarks</th><th></th></tr></thead>
           <tbody>
             {tags.map((t) => (

@@ -245,8 +245,8 @@ const AdminSongs = () => {
 
       <Input placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-xs" />
 
-      <div className="bg-card border border-border rounded-sm overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-card border border-border rounded-sm overflow-x-auto">
+        <table className="w-full text-sm min-w-[560px]">
           <thead className="bg-popover text-xs uppercase tracking-widest text-muted-foreground">
             <tr><th className="px-4 py-3 text-left">Title</th><th className="text-left">Artist</th><th className="text-left">Lyrics</th><th className="text-left">Synced</th><th>Status</th><th></th></tr>
           </thead>

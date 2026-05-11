@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { z } from "zod";
+import { Eye, EyeOff } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { usernameToEmail } from "@/lib/auth";
 
@@ -18,6 +19,7 @@ const Auth = () => {
   const { user, signIn } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPw, setShowPw] = useState(false);
 
   if (user) return <Navigate to="/" replace />;
 
@@ -47,7 +49,15 @@ const Auth = () => {
           <h2 className="text-sm font-medium mb-6 text-center text-muted-foreground tracking-widest uppercase">Sign in</h2>
           <form onSubmit={onSignIn} className="space-y-4">
             <div><Label htmlFor="si-username">Username</Label><Input id="si-username" name="username" type="text" autoComplete="username" required maxLength={64} /></div>
-            <div><Label htmlFor="si-pw">Password</Label><Input id="si-pw" name="password" type="password" autoComplete="current-password" required maxLength={100} /></div>
+            <div>
+              <Label htmlFor="si-pw">Password</Label>
+              <div className="relative">
+                <Input id="si-pw" name="password" type={showPw ? "text" : "password"} autoComplete="current-password" required maxLength={100} className="pr-10" />
+                <button type="button" onClick={() => setShowPw((p) => !p)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground" tabIndex={-1}>
+                  {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
             <Button type="submit" disabled={loading} className="w-full">{loading ? "Signing in..." : "Sign in"}</Button>
           </form>
           <p className="text-[11px] text-muted-foreground mt-6 text-center">Accounts are created by an administrator. Contact your admin if you need access.</p>

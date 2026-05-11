@@ -72,6 +72,19 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // stop playback when user logs out
+  useEffect(() => {
+    if (!user) {
+      const el = audioRef.current;
+      if (el) { el.pause(); el.src = ""; }
+      setQueue([]);
+      setIndex(-1);
+      setIsPlaying(false);
+      setPosition(0);
+      setDuration(0);
+    }
+  }, [user]);
+
   const logHistory = useCallback(async (song: Song) => {
     if (!user) return;
     await supabase.from("play_history").insert({ user_id: user.id, song_id: song.id });
