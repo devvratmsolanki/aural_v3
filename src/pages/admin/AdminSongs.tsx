@@ -181,64 +181,73 @@ const AdminSongs = () => {
         <h1 className="text-2xl font-semibold tracking-tight">Songs</h1>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild><Button onClick={openNew}><Plus className="h-4 w-4 mr-2" />New song</Button></DialogTrigger>
-          <DialogContent className="max-w-3xl">
-            <DialogHeader><DialogTitle>{form.id ? "Edit" : "New"} song</DialogTitle></DialogHeader>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mt-2">
-              <div><Label>Title</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} maxLength={200} /></div>
-              <div><Label>Artist <span className="text-muted-foreground text-[10px]">(optional)</span></Label><Input value={form.artist} onChange={(e) => setForm({ ...form, artist: e.target.value })} maxLength={200} /></div>
+          <DialogContent className="sm:max-w-3xl max-h-[90dvh] flex flex-col gap-0 p-0">
+            <DialogHeader className="px-6 pt-6 pb-4 shrink-0 border-b border-border">
+              <DialogTitle>{form.id ? "Edit" : "New"} song</DialogTitle>
+            </DialogHeader>
 
-              <div>
-                <Label>MP3 file</Label>
-                <Input type="file" accept="audio/mpeg,audio/mp3,.mp3" onChange={(e) => setAudioFile(e.target.files?.[0] ?? null)} />
-                {form.file_path && !audioFile && <p className="text-[10px] text-muted-foreground mt-1 truncate">Current: {form.file_path}</p>}
-              </div>
-              <div>
-                <Label>Cover image (optional)</Label>
-                <Input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => setCoverFile(e.target.files?.[0] ?? null)} />
-                {form.cover_image && !coverFile && <p className="text-[10px] text-muted-foreground mt-1 truncate">Current: {form.cover_image}</p>}
-              </div>
+            <div className="overflow-y-auto flex-1 px-6 py-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                <div><Label>Title</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} maxLength={200} /></div>
+                <div><Label>Artist <span className="text-muted-foreground text-[10px]">(optional)</span></Label><Input value={form.artist} onChange={(e) => setForm({ ...form, artist: e.target.value })} maxLength={200} /></div>
 
-              <div>
-                <Label>Tags</Label>
-                <div className="flex flex-wrap gap-2 mt-2 p-2 rounded-md border border-input bg-background min-h-10">
-                  {tags.length === 0 && <span className="text-xs text-muted-foreground">No tags yet — create one in the Tags tab.</span>}
-                  {tags.map((t) => {
-                    const active = form.tag_ids.includes(t.id);
-                    return (
-                      <button
-                        key={t.id}
-                        type="button"
-                        onClick={() => setForm({ ...form, tag_ids: active ? form.tag_ids.filter((x) => x !== t.id) : [...form.tag_ids, t.id] })}
-                        className={`px-2.5 py-1 rounded-full text-xs border transition-colors ${active ? "bg-primary/15 border-primary text-primary" : "border-border text-muted-foreground hover:text-silver"}`}
-                      >
-                        {t.name}
-                      </button>
-                    );
-                  })}
+                <div>
+                  <Label>MP3 file</Label>
+                  <Input type="file" accept="audio/mpeg,audio/mp3,.mp3" onChange={(e) => setAudioFile(e.target.files?.[0] ?? null)} className="cursor-pointer" />
+                  {form.file_path && !audioFile && <p className="text-[10px] text-muted-foreground mt-1 truncate">Current: {form.file_path}</p>}
                 </div>
-              </div>
-              <div>
-                <Label>Visibility</Label>
-                <div className="h-10 flex items-center gap-3 px-3 rounded-md border border-input bg-background">
-                  <Switch checked={form.status === "active"} onCheckedChange={(v) => setForm({ ...form, status: v ? "active" : "inactive" })} />
-                  <span className="text-sm text-muted-foreground">{form.status === "active" ? "Visible to users" : "Hidden"}</span>
+                <div>
+                  <Label>Cover image <span className="text-muted-foreground text-[10px]">(optional)</span></Label>
+                  <Input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => setCoverFile(e.target.files?.[0] ?? null)} className="cursor-pointer" />
+                  {form.cover_image && !coverFile && <p className="text-[10px] text-muted-foreground mt-1 truncate">Current: {form.cover_image}</p>}
                 </div>
-              </div>
 
-              <HMSInput label="Play from" value={form.play_from} onChange={(v) => setForm({ ...form, play_from: v ?? 0 })} />
-              <HMSInput label="End at (optional)" value={form.end_at} onChange={(v) => setForm({ ...form, end_at: v })} allowEmpty />
+                <div>
+                  <Label>Tags</Label>
+                  <div className="flex flex-wrap gap-2 mt-2 p-2 rounded-md border border-input bg-background min-h-10">
+                    {tags.length === 0 && <span className="text-xs text-muted-foreground">No tags yet — create one in the Tags tab.</span>}
+                    {tags.map((t) => {
+                      const active = form.tag_ids.includes(t.id);
+                      return (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() => setForm({ ...form, tag_ids: active ? form.tag_ids.filter((x) => x !== t.id) : [...form.tag_ids, t.id] })}
+                          className={`px-2.5 py-1 rounded-full text-xs border transition-colors ${active ? "bg-primary/15 border-primary text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}
+                        >
+                          {t.name}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <Label>Visibility</Label>
+                  <div className="h-10 flex items-center gap-3 px-3 rounded-md border border-input bg-background">
+                    <Switch checked={form.status === "active"} onCheckedChange={(v) => setForm({ ...form, status: v ? "active" : "inactive" })} />
+                    <span className="text-sm text-muted-foreground">{form.status === "active" ? "Visible to users" : "Hidden"}</span>
+                  </div>
+                </div>
 
-              <div className="md:col-span-2">
-                <Label>Lyrics</Label>
-                <Textarea rows={5} value={form.lyrics} onChange={(e) => setForm({ ...form, lyrics: e.target.value })} placeholder="Paste the song lyrics here. They'll be shown to listeners while the song plays." />
-                <p className="text-[10px] text-muted-foreground mt-1">Tip: after saving, click the magic-wand on the row to auto-sync these lyrics with the audio for karaoke-style highlighting.</p>
-              </div>
-              <div className="md:col-span-2">
-                <Label>Private notes</Label>
-                <Textarea rows={2} value={form.remarks} onChange={(e) => setForm({ ...form, remarks: e.target.value })} placeholder="Just for the two of us — memories, dates, why this song matters." maxLength={1000} />
+                <HMSInput label="Play from" value={form.play_from} onChange={(v) => setForm({ ...form, play_from: v ?? 0 })} />
+                <HMSInput label="End at (optional)" value={form.end_at} onChange={(v) => setForm({ ...form, end_at: v })} allowEmpty />
+
+                <div className="sm:col-span-2">
+                  <Label>Lyrics</Label>
+                  <Textarea rows={5} value={form.lyrics} onChange={(e) => setForm({ ...form, lyrics: e.target.value })} placeholder="Paste the song lyrics here. They'll be shown to listeners while the song plays." />
+                  <p className="text-[10px] text-muted-foreground mt-1">Tip: after saving, click the magic-wand on the row to auto-sync these lyrics with the audio for karaoke-style highlighting.</p>
+                </div>
+                <div className="sm:col-span-2">
+                  <Label>Private notes</Label>
+                  <Textarea rows={2} value={form.remarks} onChange={(e) => setForm({ ...form, remarks: e.target.value })} placeholder="Just for the two of us — memories, dates, why this song matters." maxLength={1000} />
+                </div>
               </div>
             </div>
-            <div className="flex justify-end gap-2 mt-6"><Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button><Button onClick={save} disabled={busy}>{busy ? "Saving..." : "Save"}</Button></div>
+
+            <div className="flex justify-end gap-2 px-6 py-4 shrink-0 border-t border-border">
+              <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+              <Button onClick={save} disabled={busy}>{busy ? "Saving..." : "Save"}</Button>
+            </div>
           </DialogContent>
         </Dialog>
       </div>
